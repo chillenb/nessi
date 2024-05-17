@@ -58,6 +58,10 @@ if (hdf5)
     target_link_libraries(cntr cntr_hdf5)
 endif (hdf5)
 
+if (mkl)
+    target_link_libraries(cntr MKL::MKL)
+endif()
+
 # Add all headers as public-headers to `libcntr`. That way they will
 # automatically be installed alongside `libcntr`.
 file(GLOB cntr_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp"

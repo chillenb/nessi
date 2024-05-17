@@ -46,6 +46,18 @@ endif (hdf5)
 find_package(Eigen3 REQUIRED)
 include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
 
+
+option(mkl "Build with MKL support" ON)
+if (mkl)
+    message(STATUS "Building with MKL")
+    set(MKL_THREADING "gnu_thread")
+    find_package(MKL REQUIRED)
+    include_directories(${MKL_INCLUDE_DIR})
+    list(APPEND COMMON_LIBS ${MKL_LIBRARIES})
+    add_definitions("-DEIGEN_USE_MKL_ALL")
+endif ()
+
+
 # ~~ Relocatable code for shared library ~~
 set(GCC_RELOCATABLE_FLAGS "-fPIC")
 add_definitions(${GCC_RELOCATABLE_FLAGS})

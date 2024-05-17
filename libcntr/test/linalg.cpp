@@ -250,10 +250,14 @@ TEST_CASE("Linear Algebra","[Linear Algebra]"){
         -0.2659825825942915-0.05865069413973232*I,-0.11360282329778541+0.47568997706332894*I,0.822764182049572-0.09841700478046957*I;
         
         eigen_hermv(dim,cA,edval,ecvec);
+
         
         set_cdmatrix(dim,ecvec,cvec_linalg);
         set_dvector(dim,edval,dval_linalg);
         
+        cout << cvec_exact << "\n";
+        cout << cvec_linalg << "\n";
+
         cvec_diff=cvec_linalg-cvec_exact;
         dval_diff=dval_linalg-dval_exact;
         
