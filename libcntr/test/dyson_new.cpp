@@ -123,7 +123,7 @@ TEST_CASE("Dyson, new interface","[Dyson, new interface]"){
     REQUIRE(err/Nt<tol_tight);
   }
 
-#if CNTR_USE_OMP==1
+#ifdef CNTR_USE_OMP
   SECTION("Integral form (omp)"){
     GREEN G0(Nt,Ntau,1,fermion);
     GREEN G0xSGM(Nt,Ntau,1,fermion);
@@ -152,5 +152,5 @@ TEST_CASE("Dyson, new interface","[Dyson, new interface]"){
     //cout << "Error [VIE2 (omp)] : " << err << endl;
     REQUIRE(err/Nt<tol_tight);
   }
-#endif // CNTR_USE_OMP==1
+#endif // CNTR_USE_OMP
 }

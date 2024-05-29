@@ -59,7 +59,7 @@ template
   void convolution_les_timediag<double, herm_matrix<double> >(int tstp, cdmatrix &Cles, herm_matrix<double> &A, herm_matrix<double> &B,
                                 integration::Integrator<double> &I, double beta, double h);
   
-#if CNTR_USE_OMP==1
+#ifdef CNTR_USE_OMP
 
 
 template

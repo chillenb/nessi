@@ -5,8 +5,9 @@
 #include <cstring>
 #include "catch.hpp"
 
-#include <cntr/cntr.hpp>
-#include <cntr/utils/read_inputfile.hpp>
+#include "hdf5_interface.hpp"
+#include "cntr.hpp"
+#include "utils/read_inputfile.hpp"
 
 #define CPLX std::complex<double>  
 using namespace std;

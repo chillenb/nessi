@@ -339,7 +339,7 @@ TEST_CASE("function","[function]"){
 
 	}
 
-#if CNTR_USE_HDF5 == 1
+#ifdef CNTR_USE_HDF5
 	SECTION("function hdf5 file read write") {
 		int nt = 1000;
 		double h = 0.01;

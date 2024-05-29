@@ -2,7 +2,7 @@
 #include "cntr_mpitools_impl.hpp"
 
 namespace cntr{
-#if CNTR_USE_MPI == 1
+#ifdef CNTR_USE_MPI
 	///@private
 	template void Reduce_timestep<double>(int tstp, int root, herm_matrix_timestep<double> &Gred, 
 		herm_matrix_timestep<double> &G);

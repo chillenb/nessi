@@ -20,7 +20,7 @@
 #define CPLX std::complex<double>
 using namespace std;
 
-#if CNTR_USE_HDF5 == 1
+#ifdef CNTR_USE_HDF5
 // Test get_set for herm_matrix,herm_matrix_timestep,cfunction
 double setget(GREEN &A,cdmatrix &a){
   double toterr=0.0;

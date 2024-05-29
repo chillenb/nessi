@@ -284,7 +284,7 @@ TEST_CASE("Herm member timestep","[Herm_member_timestep]"){
 		REQUIRE(err<eps);
 	}
     // Check hdf5 write/read is bijection
-    #if CNTR_USE_HDF5 == 1
+    #ifdef CNTR_USE_HDF5
     SECTION ("HDF5 - herm_matrix_timestep"){
     	double err=0.0;
 

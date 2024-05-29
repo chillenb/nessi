@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 
 #include "cntr.hpp"
+#include "hdf5_interface_cntr.hpp"
 
 #define CPLX std::complex<double>
 using namespace std;

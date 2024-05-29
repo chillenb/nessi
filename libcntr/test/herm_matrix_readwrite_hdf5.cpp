@@ -10,7 +10,7 @@ using namespace std;
 #define CFUNC cntr::function<double>
 #define GREEN_TSTP cntr::herm_matrix_timestep<double>
 
-#if CNTR_USE_HDF5 == 1
+#ifdef CNTR_USE_HDF5
 
 TEST_CASE("read/write (hdf5)","[herm_matrix_read_write_hdf5]"){
   int prec=10;

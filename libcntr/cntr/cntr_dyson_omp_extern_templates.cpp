@@ -3,7 +3,7 @@
 
 namespace cntr {
 
-#if CNTR_USE_OMP == 1
+#ifdef CNTR_USE_OMP
 template void dyson_timestep_omp<double>(int omp_num_threads, int n, herm_matrix<double> &G, 
 	double mu, function<double> &H, herm_matrix<double> &Sigma, integration::Integrator<double> &I,
 	double beta, double h);

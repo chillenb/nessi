@@ -313,7 +313,7 @@ TEST_CASE("convolution: size1x1","[convolution: size1x1]"){
     REQUIRE(err<eps);
   }
 
-#if CNTR_USE_OMP==1
+#ifdef CNTR_USE_OMP
 	SECTION("convolution_omp (bose)"){
 
 		A_bos=GREEN(nt,ntau,1,1);
@@ -934,7 +934,7 @@ TEST_CASE("convolution: size2x2","[convolution: size2x2]"){
     REQUIRE(err<eps);
   }
 
-#if CNTR_USE_OMP==1
+#ifdef CNTR_USE_OMP
   SECTION("convolution (openmp)"){
 
     A_fer=GREEN(nt,ntau,size_,-1);
@@ -978,5 +978,5 @@ TEST_CASE("convolution: size2x2","[convolution: size2x2]"){
 
     REQUIRE(err<eps);
   }
-#endif
+#endif // CNTR_USE_OMP
 }

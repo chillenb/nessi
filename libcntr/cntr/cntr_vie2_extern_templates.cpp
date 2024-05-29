@@ -43,7 +43,7 @@ namespace cntr {
   template void vie2_timestep_sin(int n,herm_matrix<double> &G,function<double> &Gsin,herm_matrix<double> &F,herm_matrix<double> &Fcc, function<double> &Fsin ,
       			 herm_matrix<double> &Q,function<double> &Qsin,double beta,double h,int SolveOrder);
 
-#if CNTR_USE_OMP==1
+#ifdef CNTR_USE_OMP
   template void vie2_timestep_omp<double>(int omp_num_threads,int n,herm_matrix<double> &G,
 					  herm_matrix<double> &F,herm_matrix<double> &Fcc,herm_matrix<double> &Q,
 					  integration::Integrator<double> &I, double beta,double h,
