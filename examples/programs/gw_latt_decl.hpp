@@ -3,8 +3,8 @@
 #include <sys/stat.h>
 #include <complex>
 #include "cntr/cntr.hpp"
-#include "cntr/hdf5/hdf5_interface.hpp"
-#include "cntr/hdf5/hdf5_interface_cntr.hpp"
+#include "cntr/hdf5_interface.hpp"
+#include "cntr/hdf5_interface_cntr.hpp"
 
 #define CFUNC cntr::function<double>
 #define GREEN cntr::herm_matrix<double>

@@ -2,9 +2,14 @@ cmake_minimum_required(VERSION 3.23)
 project("libcntr")
 
 include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 # ~~ OpenMP and MPI flags ~~
 option(CNTR_OPENMP "Build with OpenMP support" ON)
+if(CNTR_OPENMP)
+    message(STATUS "Building with OpenMP")
+    find_package(OpenMP REQUIRED)
+endif()
 
 option(CNTR_MPI "Build with MPI support" OFF)
 if(CNTR_MPI)
@@ -12,25 +17,24 @@ if(CNTR_MPI)
     find_package(MPI REQUIRED)
 endif()
 
-option(CNTR_USE_HDF5 "Build with HDF5 support" ON)
-
-if (CNTR_USE_HDF5)
+option(CNTR_HDF5 "Build with HDF5 support" ON)
+if (CNTR_HDF5)
     message(STATUS "Building with HDF5")
     find_package(HDF5 REQUIRED)
 endif()
-
-# ~~ Add Eigen ~~
-find_package(Eigen3 REQUIRED)
 
 option(CNTR_MKL "Build with MKL support" ON)
 if (CNTR_MKL)
     message(STATUS "Building with MKL")
     set(MKL_THREADING "gnu_thread")
     find_package(MKL REQUIRED)
-    include_directories(${MKL_INCLUDE_DIR})
-    list(APPEND COMMON_LIBS ${MKL_LIBRARIES})
     add_definitions("-DEIGEN_USE_MKL_ALL")
 endif ()
+
+# ~~ Add Eigen ~~
+find_package(Eigen3 REQUIRED)
+
+
 
 
 # ~~ Warning Flags ~~
@@ -175,14 +179,21 @@ target_sources(cntr PUBLIC
     FILES ${cntr_HEADERS}
 )
 
+target_include_directories(cntr PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    INTERFACE
+    $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>
+    $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include/cntr>
+)
+
 if (CNTR_MKL)
     target_link_libraries(cntr PUBLIC MKL::MKL Eigen3::Eigen)
 endif ()
 
-if (CNTR_USE_HDF5)
+if (CNTR_HDF5)
     add_library(cntr_hdf5 SHARED cntr/hdf5_interface.cpp)
-    add_library(cntr::hdf5 ALIAS cntr_hdf5)
-    target_link_libraries(cntr_hdf5 PUBLIC HDF5::HDF5)
+    add_library(cntr::cntr_hdf5 ALIAS cntr_hdf5)
+    target_link_libraries(cntr_hdf5 PRIVATE HDF5::HDF5)
     target_sources(cntr_hdf5 PRIVATE 
         FILE_SET public_headers
         TYPE HEADERS
@@ -196,7 +207,7 @@ if (CNTR_USE_HDF5)
     target_link_libraries(cntr PUBLIC cntr_hdf5)
     target_compile_definitions(cntr PUBLIC CNTR_USE_HDF5)
     target_compile_definitions(cntr_hdf5 PUBLIC CNTR_USE_HDF5)
-endif (CNTR_USE_HDF5)
+endif (CNTR_HDF5)
 
 
 if (CNTR_OPENMP)
@@ -216,10 +227,12 @@ endif()
 install(TARGETS cntr
         EXPORT cntr
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        FILE_SET public_headers
+        FILE_SET public_headers DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cntr
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 install(EXPORT cntr
+        EXPORT_LINK_INTERFACE_LIBRARIES
         FILE cntr-config.cmake
         NAMESPACE cntr::
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/cntr

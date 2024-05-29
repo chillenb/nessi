@@ -27,6 +27,8 @@ set (mpi_EXECUTABLES
     gw.x
 )
 
+set( all_EXECUTABLES ${regular_EXECUTABLES} ${withhdf5_EXECUTABLES} ${mpi_EXECUTABLES} )
+
 set( EXE_hubbard_chain_2b.x_SOURCES hubbard_chain_selfen_impl.cpp hubbard_chain_2b.cpp )
 set( EXE_hubbard_chain_gw.x_SOURCES hubbard_chain_selfen_impl.cpp hubbard_chain_gw.cpp )
 set( EXE_hubbard_chain_tpp.x_SOURCES hubbard_chain_selfen_impl.cpp hubbard_chain_tpp.cpp )
@@ -48,33 +50,51 @@ set( EXE_Holstein_impurity_singlebath_uMig.x_SOURCES Holstein_impurity_impl.cpp 
 #set( EXE_Holstein_bethe_cdw_uMig.x_SOURCES Holstein_impurity_impl.cpp Holstein_utils_impl.cpp Holstein_bethe_cdw_uMig.cpp)
 #set( EXE_Holstein_bethe_2temp_cdw_uMig.x_SOURCES Holstein_impurity_impl.cpp Holstein_utils_impl.cpp Holstein_bethe_2temp_cdw_uMig.cpp)
 
-
-# ~~ Paths and Subdirs ~~
-include_directories(${CMAKE_INCLUDE_PATH})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-# ~~ Libraries ~~
-link_directories(${CMAKE_LIBRARY_PATH})
+set(demos ${regular_EXECUTABLES})
 
 foreach( exe ${regular_EXECUTABLES} )
     # declare the target...
     add_executable( ${exe} ${EXE_${exe}_SOURCES} )
-    target_link_libraries(${exe} cntr ${COMMON_LIBS})
+    target_link_libraries(${exe} PUBLIC cntr::cntr Eigen3::Eigen)
+
+    if(CNTR_MKL)
+        target_link_libraries(${exe} PUBLIC MKL::MKL)
+        target_compile_definitions(${exe} PUBLIC -DEIGEN_USE_MKL_ALL)
+    endif()
 endforeach()
 
-if(hdf5)
+if(CNTR_HDF5)
     foreach( exe ${withhdf5_EXECUTABLES} )
         # declare the target...
         add_executable( ${exe} ${EXE_${exe}_SOURCES} )
-        target_link_libraries(${exe} cntr cntr_hdf5 ${COMMON_LIBS})
+        target_link_libraries(${exe} PUBLIC cntr::cntr cntr::cntr_hdf5 Eigen3::Eigen)
+    
+        if(CNTR_MKL)
+            target_link_libraries(${exe} PUBLIC MKL::MKL)
+            target_compile_definitions(${exe} PUBLIC -DEIGEN_USE_MKL_ALL)
+        endif()
     endforeach()
-endif(hdf5)
+    list(APPEND demos ${withhdf5_EXECUTABLES})
+endif(CNTR_HDF5)
 
-if(mpi AND hdf5) 
+if(CNTR_MPI) 
     foreach( exe ${mpi_EXECUTABLES} )
         # declare the target...
         add_executable( ${exe} ${EXE_${exe}_SOURCES} )
-        target_link_libraries(${exe} cntr cntr_hdf5 ${COMMON_LIBS})
+        target_link_libraries(${exe} PUBLIC cntr::cntr Eigen3::Eigen)
+    
+        if(CNTR_MKL)
+            target_link_libraries(${exe} PUBLIC MKL::MKL)
+            target_compile_definitions(${exe} PUBLIC -DEIGEN_USE_MKL_ALL)
+        endif()
+        target_link_libraries(${exe} PUBLIC MPI::MPI_CXX)
     endforeach()
-endif(mpi AND hdf5)
+    list(APPEND demos ${mpi_EXECUTABLES})
+endif(CNTR_MPI)
+
+if(CNTR_OPENMP)
+    foreach( exe ${demos} )
+        target_link_libraries(${exe} PUBLIC OpenMP::OpenMP_CXX)
+    endforeach()
+endif()
 

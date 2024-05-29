@@ -8,8 +8,8 @@
 
 // contour library headers
 #include "cntr/cntr.hpp"
-#include "cntr/hdf5/hdf5_interface.hpp"
-#include "cntr/hdf5/hdf5_interface_cntr.hpp"
+#include "cntr/hdf5_interface.hpp"
+#include "cntr/hdf5_interface_cntr.hpp"
 
 // local headers to include
 #include "formats.hpp"

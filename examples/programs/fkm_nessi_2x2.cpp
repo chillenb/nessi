@@ -10,8 +10,8 @@
 // contour library headers
 #include <Eigen/Eigen>
 #include "cntr/cntr.hpp"
-#include "cntr/hdf5/hdf5_interface.hpp"
-#include "cntr/hdf5/hdf5_interface_cntr.hpp"
+#include "cntr/hdf5_interface.hpp"
+#include "cntr/hdf5_interface_cntr.hpp"
 
 #include "cntr/utils/read_inputfile.hpp"
 
