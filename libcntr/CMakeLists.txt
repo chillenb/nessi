@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.23)
 project("libcntr")
 
 include(GNUInstallDirs)
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 # ~~ OpenMP and MPI flags ~~
 option(CNTR_OPENMP "Build with OpenMP support" ON)
@@ -22,8 +21,6 @@ endif()
 
 # ~~ Add Eigen ~~
 find_package(Eigen3 REQUIRED)
-include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
-
 
 option(CNTR_MKL "Build with MKL support" ON)
 if (CNTR_MKL)
@@ -179,7 +176,7 @@ target_sources(cntr PUBLIC
 )
 
 if (CNTR_MKL)
-    target_link_libraries(cntr PUBLIC MKL::MKL)
+    target_link_libraries(cntr PUBLIC MKL::MKL Eigen3::Eigen)
 endif ()
 
 if (CNTR_USE_HDF5)
